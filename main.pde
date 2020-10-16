@@ -1,24 +1,22 @@
-ArrayList<Vehicle> veis;
+Vehicle veis[];
 
 void setup() {
-  size(1200, 600);
+  size(600, 600);
 
-  veis = new ArrayList<Vehicle>();
-
-  for (int i = 0; i < 10; i++)
-    veis.add(new Vehicle(new PVector(random(width), random(height))));
-    
+  veis = new Vehicle[13];
+  for (int i = 0; i < veis.length; i++)
+    veis[i] = new Vehicle();
 }
 
 void draw() {
-  background(55, 5, 10);
+  background(25);
 
-  for (Vehicle vei : veis) {
-    vei.wander();
-    vei.run();
-    for (Vehicle voi : veis) {
-      if (voi != vei)
-        vei.flee(voi.position);
-    }
+  for (int i = 0; i < veis.length; i++) {
+    veis[i].wander();
+    veis[i].run();
+
+    for (int j = 0; j < veis.length; j++)
+      if (i != j)
+        veis[i].flee(veis[j].position);
   }
 }
