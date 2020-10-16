@@ -2,10 +2,10 @@ class Vehicle {
   PVector position, velocity, acceleration;
   float mass, radius, maxSpeed, maxForce, minDist, wanderAngle;
 
-  Vehicle(PVector position) {
-    this.position = position.copy();
+  Vehicle() {
+    position = new PVector(random(width), random(height));
 
-    velocity = new PVector();
+    velocity = new PVector(random(-2.5, 2.5), random(-2.5, 2.5));
     acceleration = new PVector();
     mass = 8;
     radius = mass;
@@ -15,11 +15,11 @@ class Vehicle {
     minDist = 100;
     wanderAngle = 0;
   }
-
+  
   void run() {
     move();
     show();
-    edges1();
+    edges();
   }
 
   void move() {
@@ -50,7 +50,7 @@ class Vehicle {
     acceleration.add(forceCopy);
   }
 
-  void edges1() {
+  void edges() {
     if (position.x < 0)
       position.x = width;
     else if (position.x > width)
@@ -60,17 +60,6 @@ class Vehicle {
       position.y = height;
     else if (position.y > height)
       position.y = 0;
-  }
-
-  void edges2() {
-    if (position.x < 0)
-      position.x = 0;
-    else if (position.x > width)
-      position.x = width;
-    if (position.y < 0)
-      position.y = 0;
-    else if (position.y > height) 
-      position.y = height;
   }
 
   void seek(PVector target) {
@@ -88,23 +77,9 @@ class Vehicle {
       desired.setMag(maxSpeed);
 
       PVector steer = PVector.sub(velocity, desired);
-      steer.limit(maxForce * 2);
+      steer.limit(maxForce * PI);
       applyForce(steer);
     }
-  }
-
-  void arrive(PVector target) {
-    PVector desired = PVector.sub(target, position);
-    float dist = PVector.dist(position, target);
-
-    if (dist < minDist)
-      desired.setMag(map(dist, 0, minDist, 0, maxSpeed));
-    else
-      desired.setMag(maxSpeed);
-
-    PVector steer = PVector.sub(desired, velocity);
-    steer.limit(maxForce);
-    applyForce(steer);
   }
 
   void wander() {
